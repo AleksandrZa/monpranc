@@ -1,0 +1,28 @@
+{
+  "tests": [
+    {
+      "name": "Submit enrollment",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "user_name": "Тест Тестов",
+        "user_email": "test@example.com",
+        "user_phone": "+7 999 000 00 00",
+        "course_title": "Базовый курс актёрского мастерства",
+        "message": "Тестовая заявка"
+      },
+      "expectedStatus": 200,
+      "expectedBody": {"status": "pending"},
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Missing required fields",
+      "method": "POST",
+      "path": "/",
+      "body": {"user_name": "Тест"},
+      "expectedStatus": 400,
+      "bodyMatcher": "partial",
+      "expectedBody": {"error": "Заполните все обязательные поля"}
+    }
+  ]
+}

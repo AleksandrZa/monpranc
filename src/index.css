@@ -1,0 +1,196 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 240 10% 5%;
+    --foreground: 40 20% 92%;
+
+    --card: 240 8% 8%;
+    --card-foreground: 40 20% 92%;
+
+    --popover: 240 8% 8%;
+    --popover-foreground: 40 20% 92%;
+
+    --primary: 40 65% 57%;
+    --primary-foreground: 240 10% 5%;
+
+    --secondary: 270 40% 45%;
+    --secondary-foreground: 40 20% 92%;
+
+    --muted: 240 6% 14%;
+    --muted-foreground: 240 5% 55%;
+
+    --accent: 40 65% 57%;
+    --accent-foreground: 240 10% 5%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 40 20% 92%;
+
+    --border: 240 6% 18%;
+    --input: 240 6% 14%;
+    --ring: 40 65% 57%;
+
+    --radius: 0.75rem;
+
+    --gold: #d4a853;
+    --gold-light: #e8c97a;
+    --violet: #7b4fa6;
+    --violet-light: #9d6dc4;
+
+    --sidebar-background: 240 8% 7%;
+    --sidebar-foreground: 40 20% 92%;
+    --sidebar-primary: 40 65% 57%;
+    --sidebar-primary-foreground: 240 10% 5%;
+    --sidebar-accent: 240 6% 14%;
+    --sidebar-accent-foreground: 40 20% 92%;
+    --sidebar-border: 240 6% 18%;
+    --sidebar-ring: 40 65% 57%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-golos;
+    background-image:
+      radial-gradient(
+        ellipse at 20% 20%,
+        rgba(123, 79, 166, 0.08) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        ellipse at 80% 80%,
+        rgba(212, 168, 83, 0.06) 0%,
+        transparent 50%
+      );
+  }
+
+  h1,
+  h2,
+  h3 {
+    @apply font-playfair;
+  }
+}
+
+@layer utilities {
+  .text-gradient-gold {
+    background: linear-gradient(135deg, #e8c97a 0%, #d4a853 50%, #a07830 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-violet {
+    background: linear-gradient(135deg, #9d6dc4 0%, #7b4fa6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .bg-gradient-gold {
+    background: linear-gradient(135deg, #d4a853 0%, #e8c97a 50%, #d4a853 100%);
+  }
+
+  .bg-noise {
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  }
+
+  .card-glass {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(212, 168, 83, 0.15);
+  }
+
+  .card-glow:hover {
+    box-shadow:
+      0 0 30px rgba(212, 168, 83, 0.15),
+      0 0 60px rgba(123, 79, 166, 0.08);
+    border-color: rgba(212, 168, 83, 0.3);
+  }
+
+  .btn-gold {
+    background: linear-gradient(135deg, #d4a853 0%, #e8c97a 50%, #d4a853 100%);
+    background-size: 200% auto;
+    color: #0d0d12;
+    font-weight: 600;
+    transition:
+      background-position 0.4s ease,
+      transform 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+
+  .btn-gold:hover {
+    background-position: right center;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 25px rgba(212, 168, 83, 0.4);
+  }
+
+  .btn-outline-gold {
+    border: 1px solid rgba(212, 168, 83, 0.5);
+    color: #d4a853;
+    transition: all 0.3s ease;
+  }
+
+  .btn-outline-gold:hover {
+    background: rgba(212, 168, 83, 0.1);
+    border-color: #d4a853;
+    box-shadow: 0 0 20px rgba(212, 168, 83, 0.2);
+  }
+
+  .section-divider {
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(212, 168, 83, 0.3) 50%,
+      transparent 100%
+    );
+  }
+
+  .animate-delay-100 {
+    animation-delay: 0.1s;
+  }
+  .animate-delay-200 {
+    animation-delay: 0.2s;
+  }
+  .animate-delay-300 {
+    animation-delay: 0.3s;
+  }
+  .animate-delay-400 {
+    animation-delay: 0.4s;
+  }
+  .animate-delay-500 {
+    animation-delay: 0.5s;
+  }
+  .animate-delay-600 {
+    animation-delay: 0.6s;
+  }
+
+  .opacity-0 {
+    opacity: 0;
+  }
+
+  .star-rating span {
+    color: #d4a853;
+  }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: hsl(240 10% 5%);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(212, 168, 83, 0.3);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(212, 168, 83, 0.5);
+}

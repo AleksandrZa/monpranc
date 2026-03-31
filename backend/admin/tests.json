@@ -1,0 +1,13 @@
+{
+  "tests": [
+    {
+      "name": "Get enrollments without key",
+      "method": "POST",
+      "path": "/",
+      "body": {"action": "get_enrollments"},
+      "expectedStatus": 403,
+      "expectedBody": {"error": "Forbidden"},
+      "bodyMatcher": "partial"
+    }
+  ]
+}
