@@ -4,14 +4,14 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from urllib.parse import parse_qs
-import psycopg2
+import psycopg
 
 
 def get_db():
     database_url = os.environ.get('DATABASE_URL')
     if not database_url:
         raise RuntimeError('DATABASE_URL is not set')
-    return psycopg2.connect(database_url)
+    return psycopg.connect(database_url)
 
 
 def hash_password(password: str) -> str:
