@@ -1,73 +1,89 @@
-import { useState, useRef, useEffect } from 'react';
-import Icon from '@/components/ui/icon';
-import { api } from '@/api';
-import type { User } from '@/App';
+import { useState, useRef, useEffect } from 'react'
+import Icon from '@/components/ui/icon'
+import { api } from '@/api'
+import type { User } from '@/App'
 
 interface ProfilePageProps {
-  user: User;
-  onLogout: () => void;
-  onNavigate: (page: string) => void;
-  onUpdateUser: (user: User) => void;
+  user: User
+  onLogout: () => void
+  onNavigate: (page: string) => void
+  onUpdateUser: (user: User) => void
 }
 
 interface Enrollment {
-  id: number;
-  course_title: string;
-  status: string;
-  schedule: string | null;
-  created_at: string;
+  id: number
+  course_title: string
+  status: string
+  schedule: string | null
+  created_at: string
 }
 
 const STATUS_LABELS: Record<string, { label: string; color: string }> = {
-  pending: { label: 'Заявка отправлена', color: 'text-amber-400 bg-amber-500/10 border-amber-500/30' },
-  approved: { label: 'Заявка принята', color: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30' },
-  rejected: { label: 'Заявка отклонена', color: 'text-red-400 bg-red-500/10 border-red-500/30' },
-};
+  pending: {
+    label: 'Заявка отправлена',
+    color: 'text-amber-400 bg-amber-500/10 border-amber-500/30',
+  },
+  approved: {
+    label: 'Заявка принята',
+    color: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30',
+  },
+  rejected: {
+    label: 'Заявка отклонена',
+    color: 'text-red-400 bg-red-500/10 border-red-500/30',
+  },
+}
 
-export default function ProfilePage({ user, onLogout, onNavigate, onUpdateUser }: ProfilePageProps) {
-  const [avatar, setAvatar] = useState<string | undefined>(user.avatar);
-  const [editName, setEditName] = useState(user.name);
-  const [editMode, setEditMode] = useState(false);
-  const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
-  const [loadingEnrollments, setLoadingEnrollments] = useState(true);
-  const fileRef = useRef<HTMLInputElement>(null);
+export default function ProfilePage({
+  user,
+  onLogout,
+  onNavigate,
+  onUpdateUser,
+}: ProfilePageProps) {
+  const [avatar, setAvatar] = useState<string | undefined>(user.avatar)
+  const [editName, setEditName] = useState(user.name)
+  const [editMode, setEditMode] = useState(false)
+  const [enrollments, setEnrollments] = useState<Enrollment[]>([])
+  const [loadingEnrollments, setLoadingEnrollments] = useState(true)
+  const fileRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     if (user.id) {
-      api.getEnrollments(user.id).then(data => {
-        if (Array.isArray(data)) setEnrollments(data);
-        setLoadingEnrollments(false);
-      }).catch(() => setLoadingEnrollments(false));
+      api
+        .getEnrollments(user.id)
+        .then((data) => {
+          if (Array.isArray(data)) setEnrollments(data)
+          setLoadingEnrollments(false)
+        })
+        .catch(() => setLoadingEnrollments(false))
     }
-  }, [user.id]);
+  }, [user.id])
 
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    const reader = new FileReader();
+    const file = e.target.files?.[0]
+    if (!file) return
+    const reader = new FileReader()
     reader.onload = (ev) => {
-      const src = ev.target?.result as string;
-      setAvatar(src);
-      onUpdateUser({ ...user, avatar: src });
-    };
-    reader.readAsDataURL(file);
-  };
+      const src = ev.target?.result as string
+      setAvatar(src)
+      onUpdateUser({ ...user, avatar: src })
+    }
+    reader.readAsDataURL(file)
+  }
 
   const handleSaveName = () => {
-    setEditMode(false);
-    onUpdateUser({ ...user, name: editName, avatar });
-  };
+    setEditMode(false)
+    onUpdateUser({ ...user, name: editName, avatar })
+  }
 
-  const statusInfo = (status: string) => STATUS_LABELS[status] || STATUS_LABELS.pending;
+  const statusInfo = (status: string) =>
+    STATUS_LABELS[status] || STATUS_LABELS.pending
 
   return (
     <div className="min-h-screen pt-28 pb-24 px-6">
       <div className="max-w-2xl mx-auto">
-
         {/* Header card */}
         <div className="card-glass rounded-3xl p-8 mb-8">
           <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
-
             {/* Avatar */}
             <div className="relative flex-shrink-0">
               <div
@@ -75,7 +91,11 @@ export default function ProfilePage({ user, onLogout, onNavigate, onUpdateUser }
                 onClick={() => fileRef.current?.click()}
               >
                 {avatar ? (
-                  <img src={avatar} alt="avatar" className="w-full h-full object-cover" />
+                  <img
+                    src={avatar}
+                    alt="avatar"
+                    className="w-full h-full object-cover"
+                  />
                 ) : (
                   <div className="w-full h-full bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center text-background font-playfair font-bold text-3xl">
                     {editName.charAt(0).toUpperCase()}
@@ -85,7 +105,13 @@ export default function ProfilePage({ user, onLogout, onNavigate, onUpdateUser }
                   <Icon name="Camera" size={20} className="text-white" />
                 </div>
               </div>
-              <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleAvatarChange} />
+              <input
+                ref={fileRef}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleAvatarChange}
+              />
               <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-emerald-500 border-2 border-background" />
             </div>
 
@@ -95,32 +121,44 @@ export default function ProfilePage({ user, onLogout, onNavigate, onUpdateUser }
                 {editMode ? (
                   <input
                     value={editName}
-                    onChange={e => setEditName(e.target.value)}
+                    onChange={(e) => setEditName(e.target.value)}
                     onBlur={handleSaveName}
-                    onKeyDown={e => e.key === 'Enter' && handleSaveName()}
+                    onKeyDown={(e) => e.key === 'Enter' && handleSaveName()}
                     autoFocus
                     className="font-playfair text-2xl font-light bg-transparent border-b border-gold/50 focus:outline-none text-foreground"
                   />
                 ) : (
-                  <h1 className="font-playfair text-2xl font-light text-foreground">{editName}</h1>
+                  <h1 className="font-playfair text-2xl font-light text-foreground">
+                    {editName}
+                  </h1>
                 )}
                 <button
-                  onClick={() => editMode ? handleSaveName() : setEditMode(true)}
+                  onClick={() =>
+                    editMode ? handleSaveName() : setEditMode(true)
+                  }
                   className="text-muted-foreground hover:text-gold transition-colors flex-shrink-0"
                 >
                   <Icon name={editMode ? 'Check' : 'Pencil'} size={14} />
                 </button>
               </div>
-              <p className="font-golos text-sm text-muted-foreground mb-3">{user.email}</p>
+              <p className="font-golos text-sm text-muted-foreground mb-3">
+                {user.email}
+              </p>
               <div className="flex flex-wrap gap-2 justify-center sm:justify-start">
-                <span className="px-3 py-1 rounded-full bg-gold/10 border border-gold/20 text-gold text-xs font-golos">Студент академии</span>
-                {enrollments.filter(e => e.status === 'approved').length > 0 && (
+                <span className="px-3 py-1 rounded-full bg-gold/10 border border-gold/20 text-gold text-xs font-golos">
+                  Студент академии
+                </span>
+                {enrollments.filter((e) => e.status === 'approved').length >
+                  0 && (
                   <span className="px-3 py-1 rounded-full bg-violet/10 border border-violet/20 text-violet-300 text-xs font-golos">
-                    {enrollments.filter(e => e.status === 'approved').length} активных курса
+                    {enrollments.filter((e) => e.status === 'approved').length}{' '}
+                    активных курса
                   </span>
                 )}
               </div>
-              <p className="text-muted-foreground text-xs font-golos mt-3">Нажми на фото, чтобы загрузить своё</p>
+              <p className="text-muted-foreground text-xs font-golos mt-3">
+                Нажми на фото, чтобы загрузить своё
+              </p>
             </div>
 
             {/* Logout */}
@@ -137,7 +175,9 @@ export default function ProfilePage({ user, onLogout, onNavigate, onUpdateUser }
         {/* Courses */}
         <div>
           <div className="flex items-center justify-between mb-5">
-            <h2 className="font-playfair text-2xl font-light text-foreground">Мои курсы</h2>
+            <h2 className="font-playfair text-2xl font-light text-foreground">
+              Мои курсы
+            </h2>
             <button
               onClick={() => onNavigate('enroll')}
               className="flex items-center gap-1.5 text-gold hover:text-gold-light transition-colors font-golos text-sm"
@@ -149,15 +189,23 @@ export default function ProfilePage({ user, onLogout, onNavigate, onUpdateUser }
 
           {loadingEnrollments ? (
             <div className="flex justify-center py-12">
-              <Icon name="Loader" size={28} className="text-gold animate-spin" />
+              <Icon
+                name="Loader"
+                size={28}
+                className="text-gold animate-spin"
+              />
             </div>
           ) : enrollments.length === 0 ? (
             <div className="card-glass rounded-2xl p-10 text-center">
               <div className="w-14 h-14 rounded-full bg-gold/10 border border-gold/20 flex items-center justify-center mx-auto mb-4">
                 <Icon name="BookOpen" size={24} className="text-gold/50" />
               </div>
-              <h3 className="font-playfair text-xl font-light text-foreground mb-2">Вы пока не записаны</h3>
-              <p className="text-muted-foreground font-golos text-sm mb-6">Выберите курс и отправьте заявку — мы свяжемся с вами</p>
+              <h3 className="font-playfair text-xl font-light text-foreground mb-2">
+                Вы пока не записаны
+              </h3>
+              <p className="text-muted-foreground font-golos text-sm mb-6">
+                Выберите курс и отправьте заявку — мы свяжемся с вами
+              </p>
               <button
                 onClick={() => onNavigate('courses')}
                 className="btn-gold px-8 py-3 rounded-full font-golos font-semibold text-sm"
@@ -167,29 +215,62 @@ export default function ProfilePage({ user, onLogout, onNavigate, onUpdateUser }
             </div>
           ) : (
             <div className="space-y-4">
-              {enrollments.map(e => {
-                const st = statusInfo(e.status);
+              {enrollments.map((e) => {
+                const st = statusInfo(e.status)
                 return (
-                  <div key={e.id} className="card-glass rounded-2xl p-6 relative overflow-hidden">
-                    <div className={`absolute top-0 left-0 right-0 h-0.5 ${e.status === 'approved' ? 'bg-gradient-to-r from-gold/50 to-transparent' : e.status === 'rejected' ? 'bg-gradient-to-r from-red-500/30 to-transparent' : 'bg-gradient-to-r from-amber-500/30 to-transparent'}`} />
+                  <div
+                    key={e.id}
+                    className="card-glass rounded-2xl p-6 relative overflow-hidden"
+                  >
+                    <div
+                      className={`absolute top-0 left-0 right-0 h-0.5 ${e.status === 'approved' ? 'bg-gradient-to-r from-gold/50 to-transparent' : e.status === 'rejected' ? 'bg-gradient-to-r from-red-500/30 to-transparent' : 'bg-gradient-to-r from-amber-500/30 to-transparent'}`}
+                    />
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-golos font-semibold text-foreground mb-2">{e.course_title}</h3>
-                      <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-xs font-golos ${st.color}`}>
-                        <Icon name={e.status === 'approved' ? 'CheckCircle' : e.status === 'rejected' ? 'XCircle' : 'Clock'} size={11} fallback="Circle" />
+                      <h3 className="font-golos font-semibold text-foreground mb-2">
+                        {e.course_title}
+                      </h3>
+                      <span
+                        className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-xs font-golos ${st.color}`}
+                      >
+                        <Icon
+                          name={
+                            e.status === 'approved'
+                              ? 'CheckCircle'
+                              : e.status === 'rejected'
+                                ? 'XCircle'
+                                : 'Clock'
+                          }
+                          size={11}
+                          fallback="Circle"
+                        />
                         {st.label}
                       </span>
                       {e.schedule ? (
                         <div className="flex items-start gap-2 mt-3 p-3 rounded-xl bg-emerald-500/5 border border-emerald-500/20">
-                          <Icon name="Calendar" size={14} className="text-emerald-400 mt-0.5 flex-shrink-0" />
+                          <Icon
+                            name="Calendar"
+                            size={14}
+                            className="text-emerald-400 mt-0.5 flex-shrink-0"
+                          />
                           <div>
-                            <p className="font-golos text-xs text-emerald-400/70 mb-0.5">Расписание занятий</p>
-                            <p className="font-golos text-sm text-emerald-300">{e.schedule}</p>
+                            <p className="font-golos text-xs text-emerald-400/70 mb-0.5">
+                              Расписание занятий
+                            </p>
+                            <p className="font-golos text-sm text-emerald-300">
+                              {e.schedule}
+                            </p>
                           </div>
                         </div>
                       ) : e.status === 'approved' ? (
                         <div className="flex items-start gap-2 mt-3 p-3 rounded-xl bg-gold/5 border border-gold/15">
-                          <Icon name="Clock" size={14} className="text-gold/60 mt-0.5 flex-shrink-0" />
-                          <p className="font-golos text-xs text-muted-foreground">Расписание занятий скоро появится</p>
+                          <Icon
+                            name="Clock"
+                            size={14}
+                            className="text-gold/60 mt-0.5 flex-shrink-0"
+                          />
+                          <p className="font-golos text-xs text-muted-foreground">
+                            Расписание занятий скоро появится
+                          </p>
                         </div>
                       ) : e.status === 'pending' ? (
                         <p className="font-golos text-xs text-muted-foreground mt-3">
@@ -198,7 +279,7 @@ export default function ProfilePage({ user, onLogout, onNavigate, onUpdateUser }
                       ) : null}
                     </div>
                   </div>
-                );
+                )
               })}
 
               <button
@@ -211,7 +292,136 @@ export default function ProfilePage({ user, onLogout, onNavigate, onUpdateUser }
             </div>
           )}
         </div>
+        <footer className="border-t border-border/50 py-16 px-6">
+          <div className="max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
+              {/* Brand */}
+              <div className="md:col-span-2">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-9 h-9 rounded-full bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center shadow-md shadow-gold/20">
+                    <span className="text-background font-playfair font-bold text-lg leading-none">
+                      М
+                    </span>
+                  </div>
+                  <span className="font-playfair font-semibold text-xl tracking-widest text-foreground">
+                    МОНПАРНАС
+                  </span>
+                </div>
+                <p className="text-muted-foreground text-sm font-golos leading-relaxed max-w-xs mb-5">
+                  Академия кино — авторские методики, педагоги ведущих
+                  театральных ВУЗов Москвы, 10+ лет опыта.
+                </p>
+                <div className="flex gap-3">
+                  <a
+                    href="#"
+                    className="w-9 h-9 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-gold hover:border-gold/40 transition-all"
+                  >
+                    <Icon name="Instagram" size={16} />
+                  </a>
+                  <a
+                    href="#"
+                    className="w-9 h-9 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-gold hover:border-gold/40 transition-all"
+                  >
+                    <Icon name="Youtube" size={16} />
+                  </a>
+                  <a
+                    href="#"
+                    className="w-9 h-9 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-gold hover:border-gold/40 transition-all"
+                  >
+                    <Icon name="MessageCircle" size={16} />
+                  </a>
+                </div>
+              </div>
+
+              {/* Курсы */}
+              <div>
+                <h4 className="font-golos font-semibold text-foreground text-sm mb-4 tracking-wider">
+                  Курсы
+                </h4>
+                <ul className="space-y-2.5 font-golos text-sm text-muted-foreground">
+                  {[
+                    'Базовый курс',
+                    'Продвинутый курс',
+                    'Школа Юного Актёра',
+                    'Мастер-курсы',
+                    'Подготовка в ВУЗы',
+                  ].map((c) => (
+                    <li key={c}>
+                      <button
+                        onClick={() => onNavigate('courses')}
+                        className="hover:text-gold transition-colors text-left"
+                      >
+                        {c}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Контакты */}
+              <div>
+                <h4 className="font-golos font-semibold text-foreground text-sm mb-4 tracking-wider">
+                  Контакты
+                </h4>
+                <ul className="space-y-3 font-golos text-sm text-muted-foreground">
+                  <li className="flex items-start gap-2">
+                    <Icon
+                      name="MapPin"
+                      size={14}
+                      className="text-gold mt-0.5 shrink-0"
+                    />
+                    г. Москва, ул. Малая Лубянка, д. 16
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Icon
+                      name="Phone"
+                      size={14}
+                      className="text-gold shrink-0"
+                    />
+                    <a
+                      href="tel:+79153279755"
+                      className="hover:text-gold transition-colors"
+                    >
+                      +7 (915) 327-97-55
+                    </a>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Icon
+                      name="Mail"
+                      size={14}
+                      className="text-gold shrink-0"
+                    />
+                    <a
+                      href="mailto:info@montparnas.ru"
+                      className="hover:text-gold transition-colors"
+                    >
+                      info@montparnas.ru
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="section-divider mb-6" />
+            <div className="flex flex-col md:flex-row items-center justify-between gap-3">
+              <p className="text-muted-foreground text-xs font-golos">
+                © 2025 Академия кино Монпарнас. Все права защищены.
+              </p>
+              <div className="flex items-center gap-4">
+                <p className="text-muted-foreground/50 text-xs font-golos">
+                  г. Москва · Малая Лубянка, 16
+                </p>
+                <button
+                  onClick={() => onNavigate('admin')}
+                  className="text-muted-foreground/30 hover:text-muted-foreground/60 transition-colors text-xs font-golos"
+                >
+                  Панель управления
+                </button>
+              </div>
+            </div>
+          </div>
+        </footer>
       </div>
     </div>
-  );
+  )
 }
