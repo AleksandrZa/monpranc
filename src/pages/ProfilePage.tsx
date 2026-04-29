@@ -284,7 +284,7 @@ export default function ProfilePage({
 
               <button
                 onClick={() => onNavigate('enroll')}
-                className="w-full card-glass rounded-2xl p-5 border-2 border-dashed border-border hover:border-gold/30 transition-all flex items-center justify-center gap-2 text-muted-foreground hover:text-gold font-golos text-sm"
+                className="w-full card-glass rounded-2xl p-5 border-2 border-dashed border-border hover:border-gold/30 transition-all flex items-center justify-center gap-2 text-muted-foreground hover:text-gold font-golos text-sm mb-4"
               >
                 <Icon name="Plus" size={16} />
                 Записаться ещё на один курс
