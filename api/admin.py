@@ -83,6 +83,67 @@ class handler(BaseHTTPRequestHandler):
                 self._send(200, {'ok': True}, headers)
                 return
 
+
+            if action == 'get_teachers':
+                cur.execute('SELECT id, name, role, short_role, detail, photo_url, photo_data, bio, theaters, films, awards, is_featured, sort_order, created_at, updated_at FROM teachers ORDER BY sort_order ASC, name ASC')
+                rows = cur.fetchall()
+                result = [
+                    {'id': r[0], 'name': r[1], 'role': r[2], 'short_role': r[3], 'detail': r[4], 'photo_url': r[5], 'photo_data': r[6], 'bio': r[7] or [], 'theaters': r[8] or [], 'films': r[9] or [], 'awards': r[10] or [], 'is_featured': r[11], 'sort_order': r[12], 'created_at': str(r[13]), 'updated_at': str(r[14])}
+                    for r in rows
+                ]
+                self._send(200, result, headers)
+                return
+
+            if action == 'upsert_teacher':
+                teacher = body.get('teacher') or {}
+                teacher_id = (teacher.get('id') or '').strip()
+                name = (teacher.get('name') or '').strip()
+                role = (teacher.get('role') or '').strip()
+                if not teacher_id or not name or not role:
+                    self._send(400, {'error': 'Teacher id, name and role are required'}, headers)
+                    return
+                cur.execute(
+                    '''
+                    INSERT INTO teachers (
+                        id, name, role, short_role, detail, photo_url, photo_data, bio, theaters, films, awards, is_featured, sort_order, updated_at
+                    ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, NOW())
+                    ON CONFLICT (id) DO UPDATE SET
+                        name = EXCLUDED.name,
+                        role = EXCLUDED.role,
+                        short_role = EXCLUDED.short_role,
+                        detail = EXCLUDED.detail,
+                        photo_url = EXCLUDED.photo_url,
+                        photo_data = EXCLUDED.photo_data,
+                        bio = EXCLUDED.bio,
+                        theaters = EXCLUDED.theaters,
+                        films = EXCLUDED.films,
+                        awards = EXCLUDED.awards,
+                        is_featured = EXCLUDED.is_featured,
+                        sort_order = EXCLUDED.sort_order,
+                        updated_at = NOW()
+                    RETURNING id
+                    ''',
+                    (
+                        teacher_id,
+                        name,
+                        role,
+                        teacher.get('short_role'),
+                        teacher.get('detail'),
+                        teacher.get('photo_url'),
+                        teacher.get('photo_data'),
+                        teacher.get('bio') or [],
+                        teacher.get('theaters') or [],
+                        teacher.get('films') or [],
+                        teacher.get('awards') or [],
+                        bool(teacher.get('is_featured')),
+                        int(teacher.get('sort_order') or 999),
+                    )
+                )
+                row = cur.fetchone()
+                conn.commit()
+                self._send(200, {'ok': True, 'id': row[0]}, headers)
+                return
+
             if action == 'get_users':
                 cur.execute('SELECT id, name, email, is_admin, created_at FROM users ORDER BY created_at DESC')
                 rows = cur.fetchall()

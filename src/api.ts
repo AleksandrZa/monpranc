@@ -3,6 +3,7 @@ const URLS = {
   reviews: '/api/reviews',
   enroll: '/api/enroll',
   admin: '/api/admin',
+  teachers: '/api/teachers',
 };
 
 async function post(url: string, body: object, adminKey?: string) {
@@ -46,6 +47,14 @@ export const api = {
   getEnrollments: (userId: number) =>
     get(URLS.enroll, { user_id: String(userId) }),
 
+
+
+  getTeachers: () =>
+    get(URLS.teachers),
+
+  getTeacher: (id: string) =>
+    get(URLS.teachers, { id }),
+
   admin: {
     getEnrollments: (key: string) =>
       post(URLS.admin, { action: 'get_enrollments' }, key),
@@ -59,5 +68,10 @@ export const api = {
       post(URLS.admin, { action: 'reject_review', id }, key),
     getUsers: (key: string) =>
       post(URLS.admin, { action: 'get_users' }, key),
+    getTeachers: (key: string) =>
+      post(URLS.admin, { action: 'get_teachers' }, key),
+    upsertTeacher: (key: string, teacher: Record<string, unknown>) =>
+      post(URLS.admin, { action: 'upsert_teacher', teacher }, key),
+
   },
 };

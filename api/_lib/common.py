@@ -7,6 +7,89 @@ from urllib.parse import parse_qs
 import psycopg
 
 
+DEFAULT_TEACHERS = [
+    {
+        'id': 'ovchinnikov',
+        'name': 'Родион Овчинников',
+        'role': 'Ведущий педагог по актёрскому мастерству',
+        'short_role': 'Актёр, режиссёр, заслуженный артист России',
+        'detail': 'Профессор ВТУ им. Щукина. Театр «Ленком», Таганка',
+        'bio': [
+            'Актёр, режиссёр, драматург, заслуженный артист России, профессор кафедры мастерства актёра ВТУ им. Б.В. Щукина.',
+            'С 1996 года преподаёт в театральном институте им. Б.В. Щукина. Профессор кафедры мастерства актёра.',
+            'С 2014 года — ведущий педагог по актёрскому мастерству Академии кино Montparnas.',
+        ],
+        'theaters': [
+            'Театр «Ленком»: «Юнона и Авось», «Жестокие игры», «Иванов»',
+            'Театр на Таганке: «Борис Годунов», «Мастер и Маргарита», «Тартюф»',
+        ],
+        'awards': ['Заслуженный артист России', 'Профессор ВТУ им. Б.В. Щукина'],
+        'is_featured': True,
+        'sort_order': 1,
+    },
+    {
+        'id': 'isaeva',
+        'name': 'Вероника Исаева',
+        'role': 'Педагог по сценической речи и актёрскому мастерству (ШЮА)',
+        'short_role': 'Педагог по сценической речи и актёрскому мастерству',
+        'detail': 'Школа-студия МХАТ, ВТУ им. Щукина. Опыт с 2006 года',
+        'bio': ['Актриса театра и кино, режиссёр, педагог.', 'Опыт преподавания с 2006 года.'],
+        'is_featured': True,
+        'sort_order': 2,
+    },
+    {
+        'id': 'kuzina',
+        'name': 'Виктория Кузина',
+        'role': 'Педагог по актёрскому мастерству',
+        'short_role': 'Педагог по системе Ли Страсберга',
+        'detail': 'Кастинг-директор. «О чём говорят мужчины» и другие',
+        'bio': ['Кастинг-директор, педагог по системе Ли Страсберга.'],
+        'films': ['Кастинг-директор к/ф «О чём говорят мужчины»'],
+        'is_featured': True,
+        'sort_order': 3,
+    },
+    {
+        'id': 'rapoport',
+        'name': 'Александр Рапопорт',
+        'role': 'Педагог по актёрскому мастерству',
+        'short_role': 'Педагог по актёрскому мастерству',
+        'detail': 'Актёр театра и кино, режиссёр',
+        'bio': ['Актёр театра и кино, режиссёр, педагог по актёрскому мастерству.'],
+        'is_featured': True,
+        'sort_order': 4,
+    },
+    {
+        'id': 'dunaev',
+        'name': 'Данила Дунаев',
+        'role': 'Педагог по актёрскому мастерству',
+        'short_role': 'Педагог по актёрскому мастерству',
+        'detail': 'Актёр театра и кино',
+        'bio': ['Актёр театра и кино, педагог по актёрскому мастерству.'],
+        'is_featured': True,
+        'sort_order': 5,
+    },
+]
+
+MORE_TEACHERS = [
+    'polyansky:Роман Полянский', 'maslov:Игорь Маслов', 'mukhamadaev:Дмитрий Мухамадаев',
+    'milkis:Михаил Милькис', 'gusarova:Анна Гусарова', 'soshnnikov:Станислав Сошников',
+    'tsomaeva:Аида Цомаева', 'vishnevskaya:Александра Вишневская', 'boytsov:Максим Бойцов',
+    'sakhnov:Владислав Сахнов', 'itimeneva:Валерия Итименева', 'blinova:Александра Блинова',
+    'andreeva:Татьяна Андреева', 'stefanko:Елена Стефанко', 'malinskaya:Елена Малинская',
+]
+
+for i, item in enumerate(MORE_TEACHERS, start=6):
+    teacher_id, name = item.split(':', 1)
+    DEFAULT_TEACHERS.append({
+        'id': teacher_id,
+        'name': name,
+        'role': 'Педагог по актёрскому мастерству',
+        'short_role': 'Педагог по актёрскому мастерству',
+        'is_featured': False,
+        'sort_order': i,
+    })
+
+
 def get_db():
     database_url = os.environ.get('DATABASE_URL')
     if not database_url:
@@ -35,6 +118,36 @@ def parse_query(path: str) -> dict:
         return {}
     raw = path.split('?', 1)[1]
     return {k: v[0] for k, v in parse_qs(raw).items()}
+
+
+def seed_teachers(cur):
+    cur.execute('SELECT COUNT(*) FROM teachers')
+    if cur.fetchone()[0] > 0:
+        return
+    for teacher in DEFAULT_TEACHERS:
+        cur.execute(
+            '''
+            INSERT INTO teachers (
+                id, name, role, short_role, detail, photo_url, photo_data, bio, theaters, films, awards, is_featured, sort_order
+            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            ON CONFLICT (id) DO NOTHING
+            ''',
+            (
+                teacher.get('id'),
+                teacher.get('name'),
+                teacher.get('role'),
+                teacher.get('short_role'),
+                teacher.get('detail'),
+                teacher.get('photo_url'),
+                teacher.get('photo_data'),
+                teacher.get('bio', []),
+                teacher.get('theaters', []),
+                teacher.get('films', []),
+                teacher.get('awards', []),
+                teacher.get('is_featured', False),
+                teacher.get('sort_order', 999),
+            )
+        )
 
 
 def ensure_schema(conn):
@@ -78,6 +191,40 @@ def ensure_schema(conn):
             created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
         );
         ''')
+        cur.execute('''
+        CREATE TABLE IF NOT EXISTS teachers (
+            id TEXT PRIMARY KEY,
+            name TEXT NOT NULL,
+            role TEXT NOT NULL,
+            short_role TEXT,
+            detail TEXT,
+            photo_url TEXT,
+            photo_data TEXT,
+            bio TEXT[] NOT NULL DEFAULT ARRAY[]::TEXT[],
+            theaters TEXT[] NOT NULL DEFAULT ARRAY[]::TEXT[],
+            films TEXT[] NOT NULL DEFAULT ARRAY[]::TEXT[],
+            awards TEXT[] NOT NULL DEFAULT ARRAY[]::TEXT[],
+            is_featured BOOLEAN NOT NULL DEFAULT FALSE,
+            sort_order INTEGER NOT NULL DEFAULT 999,
+            created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+            updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+        );
+        ''')
+        cur.execute('''
+        ALTER TABLE teachers
+        ADD COLUMN IF NOT EXISTS photo_url TEXT,
+        ADD COLUMN IF NOT EXISTS photo_data TEXT,
+        ADD COLUMN IF NOT EXISTS short_role TEXT,
+        ADD COLUMN IF NOT EXISTS detail TEXT,
+        ADD COLUMN IF NOT EXISTS bio TEXT[] NOT NULL DEFAULT ARRAY[]::TEXT[],
+        ADD COLUMN IF NOT EXISTS theaters TEXT[] NOT NULL DEFAULT ARRAY[]::TEXT[],
+        ADD COLUMN IF NOT EXISTS films TEXT[] NOT NULL DEFAULT ARRAY[]::TEXT[],
+        ADD COLUMN IF NOT EXISTS awards TEXT[] NOT NULL DEFAULT ARRAY[]::TEXT[],
+        ADD COLUMN IF NOT EXISTS is_featured BOOLEAN NOT NULL DEFAULT FALSE,
+        ADD COLUMN IF NOT EXISTS sort_order INTEGER NOT NULL DEFAULT 999,
+        ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW();
+        ''')
+        seed_teachers(cur)
         conn.commit()
     finally:
         cur.close()
