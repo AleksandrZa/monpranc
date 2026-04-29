@@ -12,6 +12,8 @@ const courses = [
     category: 'base',
     title: 'Базовый курс актёрского мастерства',
     level: 'Начинающий',
+    price: '120 000 ₽',
+    time: '120 ч.',
     desc: 'Фундамент актёрской профессии: речь, пластика, работа с образом. Подходит для тех, кто впервые приходит в мир театра и кино.',
     includes: [
       'Сценическая речь',
@@ -26,6 +28,8 @@ const courses = [
     category: 'advanced',
     title: 'Продвинутый курс актёрского мастерства',
     level: 'Продвинутый',
+    price: '200 000 ₽',
+    time: '100 ч.',
     desc: 'Углублённое изучение техники актёрской игры. Работа над ролью, анализ текста, создание сложных образов.',
     includes: [
       'Анализ роли',
@@ -40,6 +44,8 @@ const courses = [
     category: 'kids',
     title: 'Школа Юного Актёра',
     level: 'Дети и подростки',
+    price: '80 000 ₽',
+    time: '80 ч.',
     desc: 'Специальная программа для детей от 6 лет. Развитие творческого потенциала, уверенности, коммуникации через игру и театр.',
     includes: [
       'Театральные игры',
@@ -54,6 +60,8 @@ const courses = [
     category: 'master',
     title: 'Мастер-курс Родиона Овчинникова',
     level: 'Профессионал',
+    price: '96 000 ₽',
+    time: '32 ч.',
     desc: 'Авторский курс от ведущего педагога МХАТ. Глубокая работа над природой актёрского действия и психофизическим аппаратом.',
     includes: [
       'Метод физических действий',
@@ -68,6 +76,8 @@ const courses = [
     category: 'master',
     title: '«Актёрский интенсив» по методу Ли Страсберга',
     level: 'Профессионал',
+    price: '12 000 ₽',
+    time: '8 ч.',
     desc: 'Голливудский метод — техника аффективной памяти и эмоциональной памяти в действии. Метод использовали Аль Пачино, Де Ниро, Мерил Стрип.',
     includes: [
       'Аффективная память',
@@ -82,6 +92,8 @@ const courses = [
     category: 'master',
     title: 'Авторский тренинг Александра Рапопорта',
     level: 'Профессионал',
+    price: '60 000 ₽',
+    time: '40 ч.',
     desc: 'Уникальный синтез психологии, пластики и актёрской техники. Педагог ВТУ им. Щукина раскрывает скрытые ресурсы актёра.',
     includes: [
       'Психология образа',
@@ -96,6 +108,8 @@ const courses = [
     category: 'base',
     title: 'Подготовка в театральные ВУЗы',
     level: 'Абитуриенты',
+    price: '64 800 ₽',
+    time: '72 ч.',
     desc: 'Целевая подготовка к поступлению в МХАТ, Щукинское, ВГИК, ГИТИС. Отбор репертуара, работа с комиссией, психологическая подготовка.',
     includes: [
       'Программа для ВУЗа',
@@ -110,6 +124,8 @@ const courses = [
     category: 'master',
     title: 'Мастер-курс Данилы Дунаева',
     level: 'Профессионал',
+    price: '28 800 ₽',
+    time: '32 ч.',
     desc: 'Работа с известным режиссёром и педагогом ВГИК. Погружение в кинопрофессию изнутри — от пробы до съёмочной площадки.',
     includes: [
       'Работа в кадре',
@@ -124,6 +140,8 @@ const courses = [
     category: 'master',
     title: 'Звёздный мастер-класс',
     level: 'Все уровни',
+    price: '18 000 ₽',
+    time: '6 ч.',
     desc: 'Разовые встречи с ведущими актёрами, режиссёрами и деятелями киноиндустрии. Уникальная возможность пообщаться с профессионалами.',
     includes: [
       'Лекция от мастера',
@@ -236,13 +254,27 @@ export default function CoursesPage({ onNavigate }: CoursesPageProps) {
                 ))}
               </ul>
             </div>
-            <div className="font-playfair text-xl font-semibold text-foreground mb-3 leading-snug flex-grow-0">
-              20000 ₽
+            <div className="h-px w-full bg-gold/25" />
+            <div className="font-golos text-gold/25 text-sm text-muted-foreground mt-4">
+              стоимость
+            </div>
+            <div className="flex justify-between items-start">
+              <div className="font-playfair text-gold/100 text-2xl font-semibold text-foreground mb-3 leading-snug flex-grow-0 font-golos">
+                {course.price}
+              </div>
+              <div className="">
+                <div className="text-xs text-muted-foreground ml-2 w-186">
+                  за полный курс
+                </div>
+                <div className="text-xs text-muted-foreground ml-2 w-186">
+                  {course.time}
+                </div>
+              </div>
             </div>
 
             <button
               onClick={() => onNavigate('enroll')}
-              className="btn-outline-gold w-full py-3 rounded-full font-golos text-sm font-medium"
+              className="px-5 py-2 rounded-full font-golos text-sm transition-all duration-300 btn-gold"
             >
               Записаться
             </button>
