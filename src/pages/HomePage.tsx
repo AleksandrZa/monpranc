@@ -5,9 +5,6 @@ interface HomePageProps {
   onNavigate: (page: string) => void
 }
 
-const HERO_IMG =
-  'https://cdn.poehali.dev/projects/f836a67a-a8be-4af0-8a66-d2f5ea2f50dd/files/7518d156-258b-4fc6-affa-7fb8a437df12.jpg'
-
 const stats = [
   { value: '10+', label: 'лет опыта' },
   { value: '300+', label: 'выпускников' },
@@ -73,9 +70,9 @@ const reviews = [
 ]
 
 const galleryPreviews = [
-  { src: HERO_IMG, title: 'Занятия в академии' },
-  { src: HERO_IMG, title: 'Мастер-классы' },
-  { src: HERO_IMG, title: 'Наши студенты' },
+  { src: `/gallery/students/1.jpg`, title: 'Занятия в академии' },
+  { src: `/gallery/master-courses/77.jpg`, title: 'Мастер-классы' },
+  { src: `/gallery/students/5.jpg`, title: 'Наши студенты' },
 ]
 
 export default function HomePage({ onNavigate }: HomePageProps) {
@@ -98,7 +95,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{
-            backgroundImage: `url(${HERO_IMG})`,
+            backgroundImage: `url(${galleryPreviews[0].src})`,
             transform: `translateY(${scrollY * 0.3}px)`,
             willChange: 'transform',
           }}
