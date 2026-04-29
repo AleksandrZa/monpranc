@@ -253,7 +253,7 @@ export default function ReviewsPage({ onNavigate, user }: ReviewsPageProps) {
                   </span>
                 </div>
                 <span className="font-playfair font-semibold text-xl tracking-widest text-foreground">
-                  МОНПАРНАС
+                  Montparnas
                 </span>
               </div>
               <p className="text-muted-foreground text-sm font-golos leading-relaxed max-w-xs mb-5">

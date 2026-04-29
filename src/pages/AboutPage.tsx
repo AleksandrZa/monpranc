@@ -253,7 +253,7 @@ export default function AboutPage({ onNavigate }: AboutPageProps) {
                 Адрес
               </div>
               <div className="font-golos text-sm text-foreground">
-                Москва, Страстной бульвар, 4
+                Москва, ул. Малая Лубянка, д. 16
               </div>
             </div>
             <div className="border border-gold/15 p-6 text-center rounded-2xl">
@@ -262,7 +262,7 @@ export default function AboutPage({ onNavigate }: AboutPageProps) {
                 Телефон
               </div>
               <div className="font-golos text-sm text-foreground">
-                +7 (999) 000-00-00
+                +7 (915) 327-97-55
               </div>
             </div>
             <div className="border border-gold/15 p-6 text-center rounded-2xl">
@@ -275,7 +275,7 @@ export default function AboutPage({ onNavigate }: AboutPageProps) {
                 График
               </div>
               <div className="font-golos text-sm text-foreground">
-                ежедневно, 10:00–22:00
+                Ежедневно, 10:00–20:00
               </div>
             </div>
           </div>
@@ -293,7 +293,7 @@ export default function AboutPage({ onNavigate }: AboutPageProps) {
                   </span>
                 </div>
                 <span className="font-playfair font-semibold text-xl tracking-widest text-foreground">
-                  МОНПАРНАС
+                  Montparnas
                 </span>
               </div>
               <p className="text-muted-foreground text-sm font-golos leading-relaxed max-w-xs mb-5">
@@ -302,7 +302,7 @@ export default function AboutPage({ onNavigate }: AboutPageProps) {
               </p>
               <div className="flex gap-3">
                 <a
-                  href="#"
+                  href=""
                   className="w-9 h-9 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-gold hover:border-gold/40 transition-all"
                 >
                   <Icon name="Instagram" size={16} />
