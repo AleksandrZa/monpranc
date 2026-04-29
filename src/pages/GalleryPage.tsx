@@ -72,13 +72,7 @@ const galleryItems = [
   },
 ]
 
-const galleryCategories = [
-  'Все',
-  'Академия',
-  'Студенты',
-  'Мастер-курсы',
-  'Видео',
-]
+const galleryCategories = ['Все', 'Мастер-курсы', 'Студенты', 'Видео']
 
 interface GalleryPageProps {
   onNavigate: (page: string) => void
@@ -125,7 +119,7 @@ export default function GalleryPage({ onNavigate }: GalleryPageProps) {
         </div>
 
         {/* Masonry Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 auto-rows-[200px]">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 auto-rows-[200px] mb-4">
           {filtered.map((item) => (
             <div
               key={item.id}

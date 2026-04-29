@@ -236,6 +236,9 @@ export default function CoursesPage({ onNavigate }: CoursesPageProps) {
                 ))}
               </ul>
             </div>
+            <div className="font-playfair text-xl font-semibold text-foreground mb-3 leading-snug flex-grow-0">
+              20000 ₽
+            </div>
 
             <button
               onClick={() => onNavigate('enroll')}
