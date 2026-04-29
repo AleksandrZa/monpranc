@@ -89,7 +89,7 @@ export default function GalleryPage({ onNavigate }: GalleryPageProps) {
 
   return (
     <div className="min-h-screen pt-24 pb-24">
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="max-w-7xl mx-auto py-24">
         <div className="text-center mb-4">
           <span className="text-gold text-xs font-golos tracking-widest uppercase">
             Атмосфера
@@ -119,36 +119,49 @@ export default function GalleryPage({ onNavigate }: GalleryPageProps) {
         </div>
 
         {/* Masonry Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 auto-rows-[200px] mb-4">
-          {filtered.map((item) => (
-            <div
-              key={item.id}
-              className={`relative rounded-2xl overflow-hidden cursor-pointer group ${item.span}`}
-              onClick={() => setLightbox(item.src)}
-            >
-              <img
-                src={item.src}
-                alt={item.title}
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-5">
-                <span className="text-xs font-golos text-gold mb-1">
-                  {item.category}
-                </span>
-                <span className="font-playfair text-lg text-foreground">
-                  {item.title}
-                </span>
-              </div>
-              {item.type === 'video' && (
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-14 h-14 rounded-full bg-background/70 backdrop-blur flex items-center justify-center border border-gold/40">
-                    <Icon name="Play" size={20} className="text-gold ml-1" />
-                  </div>
-                </div>
-              )}
+        {activeCategory === 'Видео' ? (
+          <div className="flex flex-col items-center justify-center py-24 px-6">
+            <div className="w-24 h-24 rounded-full border border-gold/20 bg-gold/5 flex items-center justify-center mb-8">
+              <Icon name="Film" size={36} className="text-gold/40" />
             </div>
-          ))}
-        </div>
+            <h2 className="font-playfair text-3xl md:text-4xl font-light text-foreground mb-4 text-center">
+              Видео скоро появятся
+            </h2>
+            <p className="font-golos text-muted-foreground text-center max-w-sm leading-relaxed">
+              Мы готовим съёмки занятий, мастер-классов и выступлений наших
+              студентов — следите за обновлениями
+            </p>
+            <div className="mt-10 flex items-center gap-2 text-gold/40 font-golos text-xs tracking-widest uppercase">
+              <div className="w-8 h-px bg-gold/20" />
+              скоро
+              <div className="w-8 h-px bg-gold/20" />
+            </div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 auto-rows-[200px]">
+            {filtered.map((item) => (
+              <div
+                key={item.id}
+                className={`relative rounded-2xl overflow-hidden cursor-pointer group ${item.span}`}
+                onClick={() => setLightbox(item.src)}
+              >
+                <img
+                  src={item.src}
+                  alt={item.title}
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-5">
+                  <span className="text-xs font-golos text-gold mb-1">
+                    {item.category}
+                  </span>
+                  <span className="font-playfair text-lg text-foreground">
+                    {item.title}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
 
         {/* Lightbox */}
         {lightbox && (
