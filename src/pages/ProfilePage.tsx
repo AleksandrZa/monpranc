@@ -79,7 +79,7 @@ export default function ProfilePage({
     STATUS_LABELS[status] || STATUS_LABELS.pending
 
   return (
-    <div className="min-h-screen pt-28 pb-24 px-6">
+    <div className="min-h-screen pt-28 px-6">
       <div className="max-w-2xl mx-auto py-24">
         {/* Header card */}
         <div className="card-glass rounded-3xl p-8 mb-8">

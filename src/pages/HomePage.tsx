@@ -334,7 +334,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
       </section>
 
       {/* CTA */}
-      <section className="py-24 px-6">
+      <section className="pb-24 px-6">
         <div className="max-w-6xl mx-auto">
           <div className="card-glass rounded-3xl p-12 md:p-16 text-center relative overflow-hidden">
             <div
