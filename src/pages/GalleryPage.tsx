@@ -1,75 +1,195 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import Icon from '@/components/ui/icon'
-import Footer from '@/components/Footer'
 
-const HERO_IMG =
-  'https://cdn.poehali.dev/projects/f836a67a-a8be-4af0-8a66-d2f5ea2f50dd/files/7518d156-258b-4fc6-affa-7fb8a437df12.jpg'
+type GalleryItem = {
+  id: string
+  type: 'photo' | 'video'
+  category: 'Студенты' | 'Мастер-курсы' | 'Видео'
+  title: string
+  src: string
+  span: string
+}
 
-const galleryItems = [
-  {
-    id: 1,
-    type: 'photo',
-    category: 'Академия',
-    title: 'Занятия в академии',
-    src: HERO_IMG,
-    span: 'col-span-2 row-span-2',
-  },
-  {
-    id: 2,
-    type: 'photo',
-    category: 'Студенты',
-    title: 'Наши студенты',
-    src: HERO_IMG,
-    span: '',
-  },
-  {
-    id: 3,
-    type: 'photo',
-    category: 'Мастер-курсы',
-    title: 'Мастер-класс',
-    src: HERO_IMG,
-    span: '',
-  },
-  {
-    id: 4,
-    type: 'photo',
-    category: 'Академия',
-    title: 'Репетиция',
-    src: HERO_IMG,
-    span: '',
-  },
-  {
-    id: 5,
-    type: 'photo',
-    category: 'Студенты',
-    title: 'Творческая атмосфера',
-    src: HERO_IMG,
-    span: 'col-span-2',
-  },
-  {
-    id: 6,
-    type: 'video',
-    category: 'Видео',
-    title: 'О школе',
-    src: HERO_IMG,
-    span: '',
-  },
-  {
-    id: 7,
-    type: 'photo',
-    category: 'Мастер-курсы',
-    title: 'Работа с режиссёром',
-    src: HERO_IMG,
-    span: '',
-  },
-  {
-    id: 8,
-    type: 'photo',
-    category: 'Академия',
-    title: 'Сценическое движение',
-    src: HERO_IMG,
-    span: '',
-  },
+const studentImageFiles = [
+  '1.jpg',
+  '2.jpg',
+  '3.jpg',
+  '4.jpg',
+  '5.jpg',
+  '6.jpg',
+  '7.jpg',
+  '8.jpg',
+  '9.jpg',
+  '10.jpg',
+  '11.jpg',
+  '12.jpg',
+  '13.jpg',
+  '14.jpg',
+  '15.jpg',
+  '16.jpg',
+  '17.jpg',
+  '18.jpg',
+  '19.jpg',
+  '20.jpg',
+  '21.jpg',
+  '22.jpg',
+  '23.jpg',
+  '24.jpg',
+  '25.jpg',
+  '26.jpg',
+  '27.jpg',
+  '28.jpg',
+  '29.jpg',
+  '30.jpg',
+  '31.jpg',
+  '32.jpg',
+  '33.jpg',
+  '34.jpg',
+  '35.jpg',
+  '36.jpg',
+  '37.jpg',
+  '38.jpg',
+  '39.jpg',
+  '40.jpg',
+  '41.jpg',
+  '42.jpg',
+  '43.jpg',
+  '44.jpg',
+  '45.jpg',
+  '46.jpg',
+  '47.jpg',
+  '48.jpg',
+  '49.jpg',
+  '50.jpg',
+  '51.jpg',
+  '52.jpg',
+  '53.jpg',
+  '54.jpg',
+  '55.jpg',
+  '56.jpg',
+  '57.jpg',
+  '58.jpg',
+  '59.jpg',
+  '60.jpg',
+  '61.jpg',
+  '62.jpg',
+  '63.jpg',
+  '64.jpg',
+  '65.jpg',
+  '66.jpg',
+  '68.jpg',
+  '69.jpg',
+]
+
+const masterCourseImageFiles = [
+  '70.jpg',
+  '71.jpg',
+  '72.jpg',
+  '73.jpg',
+  '74.jpg',
+  '75.jpg',
+  '76.jpg',
+  '77.jpg',
+  '78.jpg',
+  '79.jpg',
+  '80.jpg',
+  '81.jpg',
+  '82.jpg',
+  '83.jpg',
+  '84.jpg',
+  '85.jpg',
+  '86.jpg',
+  '87.png',
+  '88.png',
+  '89.jpg',
+  '90.jpg',
+  '91.jpg',
+  '92.jpg',
+  '93.jpg',
+  '94.jpg',
+  '95.jpg',
+  '96.jpg',
+  '97.jpg',
+  '98.jpg',
+  '99.jpg',
+  '100.jpg',
+  '101.jpg',
+  '102.jpg',
+  '103.jpg',
+  '104.jpg',
+  '105.png',
+  '106.png',
+  '107.png',
+  '108.png',
+  '109.jpg',
+  '110.jpg',
+  '111.jpg',
+  '112.jpg',
+  '113.jpg',
+  '114.jpg',
+  '115.jpg',
+  '116.jpg',
+  '117.jpg',
+  '118.jpg',
+  '119.jpg',
+  '120.jpg',
+  '121.jpg',
+  '122.jpg',
+  '123.jpg',
+  '124.jpg',
+  '125.jpg',
+  '126.jpg',
+  '127.jpg',
+  '128.jpg',
+  '129.jpg',
+  '130.jpg',
+  '131.jpg',
+  '132.jpg',
+  '133.jpg',
+  '134.jpg',
+  '135.jpg',
+  '136.jpg',
+  '137.jpeg',
+  '138.jpeg',
+]
+
+const spanPattern = [
+  '',
+  '',
+  'md:col-span-2',
+  '',
+  'md:row-span-2',
+  '',
+  '',
+  'md:col-span-2 md:row-span-2',
+]
+
+const galleryItems: GalleryItem[] = [
+  ...studentImageFiles.map((file, index): GalleryItem => {
+    const number = index + 1
+
+    return {
+      id: `student-${file}`,
+      type: 'photo',
+      category: 'Студенты',
+      title: `Студенты — фото ${number}`,
+      src: `/gallery/students/${file}`,
+      span: spanPattern[index % spanPattern.length],
+    }
+  }),
+  ...masterCourseImageFiles.map((file, index): GalleryItem => {
+    const number = index + 1
+
+    return {
+      id: `master-course-${file}`,
+      type: 'photo',
+      category: 'Мастер-курсы',
+      title: `Мастер-курсы — фото ${number}`,
+      src: `/gallery/master-courses/${file}`,
+      span: spanPattern[(index + 3) % spanPattern.length],
+    }
+  }),
 ]
 
 const galleryCategories = ['Все', 'Мастер-курсы', 'Студенты', 'Видео']
@@ -80,7 +200,29 @@ interface GalleryPageProps {
 
 export default function GalleryPage({ onNavigate }: GalleryPageProps) {
   const [activeCategory, setActiveCategory] = useState('Все')
-  const [lightbox, setLightbox] = useState<string | null>(null)
+  const [lightbox, setLightbox] = useState<GalleryItem | null>(null)
+
+  useEffect(() => {
+    if (!lightbox) return
+
+    const originalBodyOverflow = document.body.style.overflow
+    const originalHtmlOverflow = document.documentElement.style.overflow
+
+    document.body.style.overflow = 'hidden'
+    document.documentElement.style.overflow = 'hidden'
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setLightbox(null)
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      document.body.style.overflow = originalBodyOverflow
+      document.documentElement.style.overflow = originalHtmlOverflow
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [lightbox])
 
   const filtered =
     activeCategory === 'Все'
@@ -138,16 +280,17 @@ export default function GalleryPage({ onNavigate }: GalleryPageProps) {
             </div>
           </div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 auto-rows-[200px]">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 auto-rows-[160px] sm:auto-rows-[200px]">
             {filtered.map((item) => (
               <div
                 key={item.id}
                 className={`relative rounded-2xl overflow-hidden cursor-pointer group ${item.span}`}
-                onClick={() => setLightbox(item.src)}
+                onClick={() => setLightbox(item)}
               >
                 <img
                   src={item.src}
                   alt={item.title}
+                  loading="lazy"
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-5">
@@ -164,25 +307,32 @@ export default function GalleryPage({ onNavigate }: GalleryPageProps) {
         )}
 
         {/* Lightbox */}
-        {lightbox && (
-          <div
-            className="fixed inset-0 z-50 bg-background/95 backdrop-blur-xl flex items-center justify-center p-6 animate-scale-in"
-            onClick={() => setLightbox(null)}
-          >
-            <button
-              className="absolute top-6 right-6 w-10 h-10 rounded-full bg-muted flex items-center justify-center text-foreground hover:text-gold transition-colors"
+        {lightbox &&
+          createPortal(
+            <div
+              className="fixed inset-0 z-[9999] w-screen h-[100dvh] overflow-hidden bg-background/95 backdrop-blur-xl flex items-center justify-center p-3 sm:p-6"
               onClick={() => setLightbox(null)}
+              role="button"
+              tabIndex={-1}
+              aria-label="Закрыть просмотр фотографии"
             >
-              <Icon name="X" size={18} />
-            </button>
-            <img
-              src={lightbox}
-              alt="Просмотр"
-              className="max-w-full max-h-[85vh] object-contain rounded-2xl shadow-2xl"
-              onClick={(e) => e.stopPropagation()}
-            />
-          </div>
-        )}
+              <button
+                type="button"
+                aria-label="Закрыть просмотр"
+                className="absolute top-4 right-4 sm:top-6 sm:right-6 z-10 w-10 h-10 rounded-full bg-muted/90 flex items-center justify-center text-foreground hover:text-gold transition-colors"
+                onClick={() => setLightbox(null)}
+              >
+                <Icon name="X" size={18} />
+              </button>
+
+              <img
+                src={lightbox.src}
+                alt={lightbox.title}
+                className="block max-w-[calc(100vw-1.5rem)] sm:max-w-[calc(100vw-3rem)] max-h-[calc(100dvh-1.5rem)] sm:max-h-[calc(100dvh-3rem)] w-auto h-auto object-contain rounded-2xl shadow-2xl cursor-pointer"
+              />
+            </div>,
+            document.body,
+          )}
       </div>
       <footer className="border-t border-border/50 py-16 px-6">
         <div className="max-w-6xl mx-auto">
