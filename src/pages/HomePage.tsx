@@ -5,6 +5,9 @@ interface HomePageProps {
   onNavigate: (page: string) => void
 }
 
+const HERO_IMG =
+  'https://cdn.poehali.dev/projects/f836a67a-a8be-4af0-8a66-d2f5ea2f50dd/files/7518d156-258b-4fc6-affa-7fb8a437df12.jpg'
+
 const stats = [
   { value: '10+', label: 'лет опыта' },
   { value: '300+', label: 'выпускников' },
@@ -70,9 +73,9 @@ const reviews = [
 ]
 
 const galleryPreviews = [
-  { src: `/gallery/students/1.jpg`, title: 'Занятия в академии' },
-  { src: `/gallery/master-courses/77.jpg`, title: 'Мастер-классы' },
-  { src: `/gallery/students/5.jpg`, title: 'Наши студенты' },
+  { src: `/gallery/students/16.jpg`, title: 'Наши студенты' },
+  { src: `/gallery/master-courses/105.png`, title: 'Мастер-классы' },
+  { src: `/gallery/master-courses/135.jpg`, title: 'Наши выпускники' },
 ]
 
 export default function HomePage({ onNavigate }: HomePageProps) {
@@ -95,7 +98,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{
-            backgroundImage: `url(${galleryPreviews[0].src})`,
+            backgroundImage: `url(${HERO_IMG})`,
             transform: `translateY(${scrollY * 0.3}px)`,
             willChange: 'transform',
           }}
@@ -243,7 +246,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
             {galleryPreviews.map((item, i) => (
               <div
                 key={i}
-                className={`relative rounded-2xl overflow-hidden cursor-pointer group ${i === 0 ? 'md:row-span-2 h-64 md:h-auto' : 'h-44'}`}
+                className={`relative aspect-square rounded-2xl overflow-hidden cursor-pointer group bg-muted`}
                 onClick={() => onNavigate('gallery')}
               >
                 <img
