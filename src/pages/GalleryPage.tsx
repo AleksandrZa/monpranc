@@ -88,7 +88,7 @@ export default function GalleryPage({ onNavigate }: GalleryPageProps) {
       : galleryItems.filter((g) => g.category === activeCategory)
 
   return (
-    <div className="min-h-screen pt-24 pb-24">
+    <div className="min-h-screen pt-24">
       <div className="max-w-7xl mx-auto py-24">
         <div className="text-center mb-4">
           <span className="text-gold text-xs font-golos tracking-widest uppercase">
@@ -184,7 +184,7 @@ export default function GalleryPage({ onNavigate }: GalleryPageProps) {
           </div>
         )}
       </div>
-      <footer className="border-t border-border/50 px-6">
+      <footer className="border-t border-border/50 py-16 px-6">
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
             {/* Brand */}
